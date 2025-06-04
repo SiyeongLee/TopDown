@@ -65,7 +65,13 @@ public class Player : MonoBehaviour
          scoreText.text = score.ToString();
             Destroy(collision.gameObject);
         }
+        if (collision.transform.CompareTag("NextRoom"))
+        {
+            Debug.Log(" Get Next Room ");
+            StageMgr.Instance.NextStage();
+        }
     }
+
 
 
 

@@ -85,6 +85,6 @@ public class StageMgr : MonoBehaviour
                 }
             }
         }
-        CameraMovement.Instance.CarmeraNextRoom ( );
+      
     }//NextStage
 }

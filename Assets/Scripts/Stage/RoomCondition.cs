@@ -34,7 +34,7 @@ public class RoomCondition : MonoBehaviour
             playerInThisRoom = true;
             PlayerTargeting.Instance.MonsterList = new List<GameObject> ( MonsterListInRoom );
             Debug.Log ( "Enter New Room! Mob Count : " + PlayerTargeting.Instance.MonsterList.Count );
-            //Debug.Log ( "Player Enter New Room!" );
+            Debug.Log ( "Player Enter New Room!" );
         }
         if ( other.CompareTag ( "Monster" ) )
         {
