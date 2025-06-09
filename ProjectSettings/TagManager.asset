@@ -3,9 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - item
-  - player
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -13,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Minimap
+  - Player
+  - Enemy
+  - Wall
+  - Bullet
   - 
   - 
   - 
@@ -40,9 +38,27 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 2793536325
-    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 2097543445
+    locked: 0
+  - name: Wall
+    uniqueID: 2225310727
+    locked: 0
+  - name: Door
+    uniqueID: 1241135713
+    locked: 0
+  - name: Enemy
+    uniqueID: 2301256109
+    locked: 0
+  - name: Player
+    uniqueID: 436860011
+    locked: 0
+  - name: Weapon
+    uniqueID: 3748097101
+    locked: 0
+  - name: Bullet
+    uniqueID: 1404720579
     locked: 0
