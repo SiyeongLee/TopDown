@@ -155,9 +155,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4286269695574723608}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17f835a652da6824797448bc20813427, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d794ee699551a943a0af654f78c38da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
@@ -170,14 +170,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4286269695574723608}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d794ee699551a943a0af654f78c38da, type: 3}
+  m_Script: {fileID: 11500000, guid: 17f835a652da6824797448bc20813427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  MaxHealth: 100
-  healthBar: {fileID: 0}
+  health: 1
+  moveSpeed: 2
+  attackRange: 1
+  attackDamage: 0.1
+  pool: {fileID: 0}
 --- !u!212 &5832792277353478258
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -53,7 +53,7 @@ public class PoolingManager : MonoBehaviour
         }
     }
 
-    // »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½
     private GameObject CreatePooledItemEnemy()
     {
         GameObject poolGo = Instantiate( enemyPrefab );
@@ -61,25 +61,25 @@ public class PoolingManager : MonoBehaviour
         return poolGo;
     }
 
-    // »ç¿ë
+    // ï¿½ï¿½ï¿½
     private void OnTakeFromPoolEnemy( GameObject poolGo )
     {
         poolGo.SetActive( true );
     }
 
-    // ¹ÝÈ¯
+    // ï¿½ï¿½È¯
     private void OnReturnedToPoolEnemy( GameObject poolGo )
     {
         poolGo.SetActive( false );
     }
 
-    // »èÁ¦
+    // ï¿½ï¿½ï¿½ï¿½
     private void OnDestroyPoolObjectEnemy( GameObject poolGo )
     {
         Destroy( poolGo );
     }
 
-    // »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½
     private GameObject CreatePooledItemBullet()
     {
         GameObject poolGo = Instantiate( bulletPrefab );
@@ -87,19 +87,19 @@ public class PoolingManager : MonoBehaviour
         return poolGo;
     }
 
-    // »ç¿ë
+    // ï¿½ï¿½ï¿½
     private void OnTakeFromPoolBullet( GameObject poolGo )
     {
         poolGo.SetActive( true );
     }
 
-    // ¹ÝÈ¯
+    // ï¿½ï¿½È¯
     private void OnReturnedToPoolBullet( GameObject poolGo )
     {
         poolGo.SetActive( false );
     }
 
-    // »èÁ¦
+    // ï¿½ï¿½ï¿½ï¿½
     private void OnDestroyPoolObjectBullet( GameObject poolGo )
     {
         Destroy( poolGo );

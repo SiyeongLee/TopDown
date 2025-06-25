@@ -12,7 +12,6 @@ public class Door : CustomTileBase
     private bool canCollide = false;
     [SerializeField] private Cell ownerCell;
     [SerializeField] private Door nextDoor;
-    [SerializeField] private Vector3Int nextDoorPos;
     [SerializeField] private Sprite dafaultDoorSprite;
     [SerializeField] private Sprite disabledDoorSprite;
     private SpriteRenderer doorSpriteRenderer;
@@ -39,7 +38,11 @@ public class Door : CustomTileBase
         if (player && !canCollide)
         {
             nextDoor.canCollide = true;
-            DungeonManager.GetInstance().SetPlayerPos( nextDoorPos );
+            
+            // nextDoor의 실제 위치로 이동
+            Vector3 targetPosition = nextDoor.transform.position;
+            player.transform.position = targetPosition;
+            
             DungeonManager.GetInstance().SetPlayerRoomID( nextDoor.ownerCell.id );
             DungeonManager.GetInstance().SetMainCameraPos();
 
@@ -70,16 +73,20 @@ public class Door : CustomTileBase
 
     public void SetDoorEnabled(bool isEnabled)
     {
+        Debug.Log($"[Door] SetDoorEnabled 호출됨 - 도어: {gameObject.name}, 활성화: {isEnabled}");
+        
         this.isEnabled = isEnabled;
         if (isEnabled)
         {
             doorSpriteRenderer.sprite = dafaultDoorSprite;
             boxCollider2D.isTrigger = true;
+            Debug.Log($"[Door] 도어 활성화 완료 - {gameObject.name}");
         }
         else
         {
             doorSpriteRenderer.sprite = disabledDoorSprite;
             boxCollider2D.isTrigger = false;
+            Debug.Log($"[Door] 도어 비활성화 완료 - {gameObject.name}");
         }
     }
 
@@ -93,12 +100,6 @@ public class Door : CustomTileBase
     {
         get { return nextDoor; }
         set { nextDoor = value; }
-    }
-
-    public Vector3Int NextDoorPos
-    {
-        get { return nextDoorPos; }
-        set { nextDoorPos = value; }
     }
 
     public bool CanCollide

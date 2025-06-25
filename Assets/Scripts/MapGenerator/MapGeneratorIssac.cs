@@ -55,9 +55,9 @@ public class MapGeneratorIssac : MonoBehaviour
     [SerializeField] private Sprite bossDoorSprite;
     [SerializeField] private GameObject grid;
     [SerializeField] private Cell[,] cellList;
-    
 
-    // ¿À¸¥ÂÊ, ¿ŞÂÊ, ¾Æ·¡, À§, ¿ŞÂÊ¾Æ·¡, ¿À¸¥ÂÊ¾Æ·¡, ¿ŞÂÊÀ§, ¿À¸¥ÂÊÀ§
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Æ·ï¿½, ï¿½ï¿½, ï¿½ï¿½ï¿½Ê¾Æ·ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Æ·ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private int[] xdir = new int[] { 0, 0, 1, -1, 1, 1, -1, -1 };
     private int[] ydir = new int[] { 1, -1, 0, 0, -1, 1, -1, 1 };
 
@@ -76,14 +76,14 @@ public class MapGeneratorIssac : MonoBehaviour
         },
         new Vector2Int[][]
         {
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, 1 ), new Vector2Int(-1, 0) },              // ¿À¸¥ÂÊ À§
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, 1 ), new Vector2Int(1, 0) },              // ¿À¸¥ÂÊ ¾Æ·¡
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 1, 0 ), new Vector2Int(0, 1) },              // ¾Æ·¡ ¿À¸¥ÂÊ
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 1, 0 ), new Vector2Int(0, -1) },              // ¾Æ·¡ ¿ŞÂÊ
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, -1 ), new Vector2Int(-1, 0) },              // ¿ŞÂÊ À§
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, -1 ), new Vector2Int(1, 0) },              // ¿ŞÂÊ ¾Æ·¡
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( -1, 0 ), new Vector2Int(0, 1) },              // À§ ¿À¸¥ÂÊ
-            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( -1, 0 ), new Vector2Int(0, -1) },              // À§ ¿ŞÂÊ          
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, 1 ), new Vector2Int(-1, 0) },              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, 1 ), new Vector2Int(1, 0) },              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 1, 0 ), new Vector2Int(0, 1) },              // ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 1, 0 ), new Vector2Int(0, -1) },              // ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, -1 ), new Vector2Int(-1, 0) },              // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( 0, -1 ), new Vector2Int(1, 0) },              // ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( -1, 0 ), new Vector2Int(0, 1) },              // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            new Vector2Int[] { new Vector2Int( 0, 0 ), new Vector2Int( -1, 0 ), new Vector2Int(0, -1) },              // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½          
         },
         new Vector2Int[][]
         {
@@ -97,7 +97,18 @@ public class MapGeneratorIssac : MonoBehaviour
     void Start()
     {
         InitMap();
-        GenerateRoom( cellList[ cellList.GetLength( 1 ) / 2, cellList.GetLength( 0 ) / 2 ] );
+        GenerateRoom(cellList[cellList.GetLength(1) / 2, cellList.GetLength(0) / 2]);
+
+        // í”Œë ˆì´ì–´ í• ë‹¹ í™•ì¸
+        if (player == null)
+        {
+            Debug.LogError("Player is not assigned in MapGeneratorIssac!");
+        }
+        else
+        {
+            Debug.Log($"Player assigned: {player.name}");
+        }
+
         InitPlayer();
         InitMapInvisible();
     }
@@ -105,7 +116,7 @@ public class MapGeneratorIssac : MonoBehaviour
     void InitMap()
     {
         int cellNum = roomDepth * 4;
-        mapSize = new Vector2Int( cellNum * cellSize, cellNum * cellSize );
+        mapSize = new Vector2Int(cellNum * cellSize, cellNum * cellSize);
         cellList = new Cell[cellNum, cellNum];
         tileSizePerCell = cellSize / tileNumPerCell;
         DungeonManager.GetInstance().tileNumPerCell = tileNumPerCell;
@@ -114,12 +125,12 @@ public class MapGeneratorIssac : MonoBehaviour
         {
             for (int j = 0; j < cellNum; j++)
             {
-                cellList[i, j] = Instantiate( cellObj ).GetComponent<Cell>();
-                cellList[i, j].InitCell( new Vector2Int( i, j ));
-                cellList[i, j].transform.localScale = new Vector3( cellSize, cellSize, 0 );
-                cellList[i, j].transform.position = new Vector3( -mapSize.x / 2 + i * cellSize + cellSize / 2, -mapSize.y / 2 + j * cellSize + cellSize / 2, 10 );
+                cellList[i, j] = Instantiate(cellObj).GetComponent<Cell>();
+                cellList[i, j].InitCell(new Vector2Int(i, j));
+                cellList[i, j].transform.localScale = new Vector3(cellSize, cellSize, 0);
+                cellList[i, j].transform.position = new Vector3(-mapSize.x / 2 + i * cellSize + cellSize / 2, -mapSize.y / 2 + j * cellSize + cellSize / 2, 10);
                 cellList[i, j].transform.parent = cellParent.transform;
-                cellList[i, j].tilemapLocalPos = new Vector3Int( -mapSize.x / 2 + tileNumPerCell * i, -mapSize.x / 2 + tileNumPerCell * j, 0 );
+                cellList[i, j].tilemapLocalPos = new Vector3Int(-mapSize.x / 2 + tileNumPerCell * i, -mapSize.x / 2 + tileNumPerCell * j, 0);
                 cellList[i, j].cellSize = cellSize;
             }
         }
@@ -131,65 +142,107 @@ public class MapGeneratorIssac : MonoBehaviour
         {
             for (int id = 2; id < roomID; id++)
             {
-                DungeonManager.GetInstance().SetVisibilityTiles( id, false );
-                DungeonManager.GetInstance().SetVisibilityMinimap( id, false );
+                DungeonManager.GetInstance().SetVisibilityTiles(id, false);
+                DungeonManager.GetInstance().SetVisibilityMinimap(id, false);
             }
         }
     }
 
     void InitPlayer()
     {
-        if (player == null) 
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+            if (player == null)
+            {
+                Debug.LogError("Player ì˜¤ë¸Œì íŠ¸ê°€ ì”¬ì— ì—†ìŠµë‹ˆë‹¤! Inspectorì—ì„œ player í•„ë“œë¥¼ í• ë‹¹í•˜ê±°ë‚˜, Player ì˜¤ë¸Œì íŠ¸ì— 'Player' íƒœê·¸ë¥¼ ì§€ì •í•˜ì„¸ìš”.");
+                return;
+            }
+        }
+
+        // DungeonManager null ì²´í¬ ì¶”ê°€
+        if (DungeonManager.GetInstance() == null)
+        {
+            Debug.LogError("DungeonManager instance is null!");
             return;
+        }
 
-        Vector3Int pos = new Vector3Int( tileNumPerCell / 2, tileNumPerCell / 2, 0 );
-        DungeonManager.GetInstance().SetPlayerTransform( groundTilemap.CellToWorld(pos), groundTilemap.cellSize.x * 0.5f);
+        // DungeonManagerì˜ player í•„ë“œ ì„¤ì •
+        DungeonManager.GetInstance().player = player.GetComponent<Player>();
 
-        player.GetComponent<Player>().Speed *= tileSizePerCell * 0.5f * player.transform.localScale.x;
+        // í”Œë ˆì´ì–´ ìœ„ì¹˜ ì„¤ì • - ì¤‘ì•™ ì…€ì˜ ì¤‘ì•™ì— ìœ„ì¹˜
+        Vector3Int centerCellPos = new Vector3Int(cellList.GetLength(1) / 2, cellList.GetLength(0) / 2, 0);
+        Vector3Int playerTilePos = new Vector3Int(
+            cellList[centerCellPos.x, centerCellPos.y].tilemapLocalPos.x + tileNumPerCell / 2,
+            cellList[centerCellPos.x, centerCellPos.y].tilemapLocalPos.y + tileNumPerCell / 2,
+            0
+        );
+        
+        Vector3 playerWorldPos = groundTilemap.CellToWorld(playerTilePos);
+        playerWorldPos.z = 0; // Z ìœ„ì¹˜ë¥¼ 0ìœ¼ë¡œ ì„¤ì •í•˜ì—¬ ì¹´ë©”ë¼ ì•ì— ìœ„ì¹˜
+        
+        // í”Œë ˆì´ì–´ ìœ„ì¹˜ì™€ ìŠ¤ì¼€ì¼ ì„¤ì •
+        player.transform.position = playerWorldPos;
+        
+        // DungeonManagerì— í”Œë ˆì´ì–´ ìœ„ì¹˜ ì •ë³´ ì „ë‹¬
+        DungeonManager.GetInstance().SetPlayerTransform(playerWorldPos, 1f);
+
+        // í”Œë ˆì´ì–´ ì†ë„ ì¡°ì •
+        player.GetComponent<Player>().moveSpeed *= tileSizePerCell * 0.5f;
+        
+        // í”Œë ˆì´ì–´ê°€ ë³´ì´ë„ë¡ SpriteRenderer í™œì„±í™” í™•ì¸
+        SpriteRenderer playerSprite = player.GetComponent<SpriteRenderer>();
+        if (playerSprite != null)
+        {
+            playerSprite.enabled = true;
+            // ìŠ¤í”„ë¼ì´íŠ¸ëŠ” Player ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ìì²´ì ìœ¼ë¡œ ê´€ë¦¬í•˜ë¯€ë¡œ ì—¬ê¸°ì„œ ì„¤ì •í•˜ì§€ ì•ŠìŒ
+        }
+        
+        Debug.Log($"Player initialized at position: {playerWorldPos}, scale: {player.transform.localScale}");
     }
 
     /*
      * pos: room's left down pos
      * isSpecialRoom: start or boss room
      */
-    void GenerateRoom( Cell stdCell )
+    void GenerateRoom(Cell stdCell)
     {
         int nx, ny;
 
         if (roomID > roomDepth)
             return;
 
-        (bool, List<Cell>) checkRoomResult = CheckValidRoom( stdCell );
+        (bool, List<Cell>) checkRoomResult = CheckValidRoom(stdCell);
 
-        if (checkRoomResult.Item1 == false) 
+        if (checkRoomResult.Item1 == false)
             return;
 
-        DrawCell( checkRoomResult.Item2 );
+        DrawCell(checkRoomResult.Item2);
         roomID++;
-        
-        // ÁÖº¯ »ç¿ëÇÏÁö ¾ÊÀº cell Å½»ö
-        HashSet<Cell> nearCells = GetNearCells( checkRoomResult.Item2 );
+
+        // ï¿½Öºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ cell Å½ï¿½ï¿½
+        HashSet<Cell> nearCells = GetNearCells(checkRoomResult.Item2);
         foreach (Cell cell in nearCells)
         {
-            GenerateRoom( cell );
+            GenerateRoom(cell);
             if (roomID > roomDepth)
             {
                 isBossCell = true;
                 if (!DrawnBossCell)
                 {
-                    DrawBossRoom( cell );
+                    DrawBossRoom(cell);
                 }
                 return;
-            } 
+            }
         }
     }
 
     void DrawBossRoom(Cell cell)
     {
-        (bool, List<Cell>) checkBossRoomResult = CheckBossRoom( cell );
+        (bool, List<Cell>) checkBossRoomResult = CheckBossRoom(cell);
         if (checkBossRoomResult.Item1)
         {
-            DrawCell( checkBossRoomResult.Item2 );
+            DrawCell(checkBossRoomResult.Item2);
             DrawnBossCell = true;
         }
     }
@@ -207,34 +260,34 @@ public class MapGeneratorIssac : MonoBehaviour
             }
         }
 
-        SetTileMap( cells );
+        SetTileMap(cells);
         foreach (Cell cell in cells)
         {
             for (int i = 0; i < 4; i++)
             {
                 nx = cell.pos.x + xdir[i];
                 ny = cell.pos.y + ydir[i];
-                if (0 < nx && nx <= cellList.GetLength( 1 ) && 0 < ny && ny <= cellList.GetLength( 0 ) && cellList[nx, ny].id != cell.id && cellList[nx, ny].id != 0)
+                if (0 < nx && nx <= cellList.GetLength(1) && 0 < ny && ny <= cellList.GetLength(0) && cellList[nx, ny].id != cell.id && cellList[nx, ny].id != 0)
                 {
-                    if (DungeonManager.GetInstance().IsCellAdjacent( cell, cellList[nx, ny] ))
+                    if (DungeonManager.GetInstance().IsCellAdjacent(cell, cellList[nx, ny]))
                         continue;
 
-                    DungeonManager.GetInstance().AddAdjacentID( cell, cellList[nx, ny] );
+                    DungeonManager.GetInstance().AddAdjacentID(cell, cellList[nx, ny]);
 
-                    if (i == 0 || i == 2) GenerateDoor( cell, cellList[nx, ny], (EDir)i );
-                    else if (i == 1 || i == 3) GenerateDoor( cellList[nx, ny], cell, (EDir)i );
+                    if (i == 0 || i == 2) GenerateDoor(cell, cellList[nx, ny], (EDir)i);
+                    else if (i == 1 || i == 3) GenerateDoor(cellList[nx, ny], cell, (EDir)i);
                     if (isBossCell) return;
                 }
             }
         }
     }
 
-    void SetTileMap( List<Cell> cells )
+    void SetTileMap(List<Cell> cells)
     {
         bool rOk, lOk, uOk, dOk, ldOk, rdOk, luOk, ruOk;
         int rx, ry, lx, ly, ux, uy, dx, dy, ldx, ldy, rdx, rdy, lux, luy, rux, ruy;
         foreach (Cell cell in cells)
-        { 
+        {
             rx = cell.pos.x + xdir[0];
             ry = cell.pos.y + ydir[0];
             lx = cell.pos.x + xdir[1];
@@ -252,24 +305,24 @@ public class MapGeneratorIssac : MonoBehaviour
             rux = cell.pos.x + xdir[7];
             ruy = cell.pos.y + ydir[7];
 
-            rOk = 0 <= rx && rx < cellList.GetLength( 1 ) && 0 <= ry && ry < cellList.GetLength( 0 ) && cellList[rx, ry].id == cell.id;
-            lOk = 0 <= lx && lx < cellList.GetLength( 1 ) && 0 <= ly && ly < cellList.GetLength( 0 ) && cellList[lx, ly].id == cell.id;
-            uOk = 0 <= ux && ux < cellList.GetLength( 1 ) && 0 <= uy && uy < cellList.GetLength( 0 ) && cellList[ux, uy].id == cell.id;
-            dOk = 0 <= dx && dx < cellList.GetLength( 1 ) && 0 <= dy && dy < cellList.GetLength( 0 ) && cellList[dx, dy].id == cell.id;
-            ldOk = 0 <= ldx && ldx < cellList.GetLength( 1 ) && 0 <= ldy && ldy < cellList.GetLength( 0 ) && cellList[ldx, ldy].id == cell.id;
-            rdOk = 0 <= rdx && rdx < cellList.GetLength( 1 ) && 0 <= rdy && rdy < cellList.GetLength( 0 ) && cellList[rdx, rdy].id == cell.id;
-            luOk = 0 <= lux && lux < cellList.GetLength( 1 ) && 0 <= luy && luy < cellList.GetLength( 0 ) && cellList[lux, luy].id == cell.id;
-            ruOk = 0 <= rux && rux < cellList.GetLength( 1 ) && 0 <= ruy && ruy < cellList.GetLength( 0 ) && cellList[rux, ruy].id == cell.id;
+            rOk = 0 <= rx && rx < cellList.GetLength(1) && 0 <= ry && ry < cellList.GetLength(0) && cellList[rx, ry].id == cell.id;
+            lOk = 0 <= lx && lx < cellList.GetLength(1) && 0 <= ly && ly < cellList.GetLength(0) && cellList[lx, ly].id == cell.id;
+            uOk = 0 <= ux && ux < cellList.GetLength(1) && 0 <= uy && uy < cellList.GetLength(0) && cellList[ux, uy].id == cell.id;
+            dOk = 0 <= dx && dx < cellList.GetLength(1) && 0 <= dy && dy < cellList.GetLength(0) && cellList[dx, dy].id == cell.id;
+            ldOk = 0 <= ldx && ldx < cellList.GetLength(1) && 0 <= ldy && ldy < cellList.GetLength(0) && cellList[ldx, ldy].id == cell.id;
+            rdOk = 0 <= rdx && rdx < cellList.GetLength(1) && 0 <= rdy && rdy < cellList.GetLength(0) && cellList[rdx, rdy].id == cell.id;
+            luOk = 0 <= lux && lux < cellList.GetLength(1) && 0 <= luy && luy < cellList.GetLength(0) && cellList[lux, luy].id == cell.id;
+            ruOk = 0 <= rux && rux < cellList.GetLength(1) && 0 <= ruy && ruy < cellList.GetLength(0) && cellList[rux, ruy].id == cell.id;
 
-            DrawTilesInCell( cell );
-            if (!uOk) DrawWall( cell, EDir.eUp);
-            if (!dOk) DrawWall( cell, EDir.eDown);
-            if (!rOk) DrawWall( cell, EDir.eRight);
-            if (!lOk) DrawWall( cell, EDir.eLeft);
-            if (!luOk) DrawWall( cell, EDir.eLeftUp );
-            if (!ruOk) DrawWall( cell, EDir.eRightUp );
-            if (!ldOk) DrawWall( cell, EDir.eLeftDown );
-            if (!rdOk) DrawWall( cell, EDir.eRightDown );
+            DrawTilesInCell(cell);
+            if (!uOk) DrawWall(cell, EDir.eUp);
+            if (!dOk) DrawWall(cell, EDir.eDown);
+            if (!rOk) DrawWall(cell, EDir.eRight);
+            if (!lOk) DrawWall(cell, EDir.eLeft);
+            if (!luOk) DrawWall(cell, EDir.eLeftUp);
+            if (!ruOk) DrawWall(cell, EDir.eRightUp);
+            if (!ldOk) DrawWall(cell, EDir.eLeftDown);
+            if (!rdOk) DrawWall(cell, EDir.eRightDown);
             DrawMinimap(cell, dOk, uOk, lOk, rOk);
         }
     }
@@ -279,39 +332,39 @@ public class MapGeneratorIssac : MonoBehaviour
         if (!dOk && !uOk && !lOk && !rOk)
         {
             //posWorld
-            cell.InitMinimapSprite( minimap4Walls, Quaternion.Euler( 0, 0, 0 ) );
+            cell.InitMinimapSprite(minimap4Walls, Quaternion.Euler(0, 0, 0));
         }
         else if (!dOk && !uOk && !lOk)
         {
-            cell.InitMinimapSprite( minimap3Walls, Quaternion.Euler( 0, 0, 180 ) );
+            cell.InitMinimapSprite(minimap3Walls, Quaternion.Euler(0, 0, 180));
         }
         else if (!dOk && !rOk && !lOk)
         {
-            cell.InitMinimapSprite( minimap3Walls, Quaternion.Euler( 0, 0, 270 ) );
+            cell.InitMinimapSprite(minimap3Walls, Quaternion.Euler(0, 0, 270));
         }
         else if (!dOk && !rOk && !uOk)
         {
-            cell.InitMinimapSprite( minimap3Walls, Quaternion.Euler( 0, 0, 0 ) );
+            cell.InitMinimapSprite(minimap3Walls, Quaternion.Euler(0, 0, 0));
         }
         else if (!lOk && !uOk && !rOk)
         {
-            cell.InitMinimapSprite( minimap3Walls, Quaternion.Euler( 0, 0, 90 ) );
+            cell.InitMinimapSprite(minimap3Walls, Quaternion.Euler(0, 0, 90));
         }
         else if (!lOk && !uOk)
         {
-            cell.InitMinimapSprite( minimap2Walls, Quaternion.Euler( 0, 0, 90 ) );
+            cell.InitMinimapSprite(minimap2Walls, Quaternion.Euler(0, 0, 90));
         }
         else if (!lOk && !dOk)
         {
-            cell.InitMinimapSprite( minimap2Walls, Quaternion.Euler( 0, 0, 180 ) );
+            cell.InitMinimapSprite(minimap2Walls, Quaternion.Euler(0, 0, 180));
         }
         else if (!rOk && !dOk)
         {
-            cell.InitMinimapSprite( minimap2Walls, Quaternion.Euler( 0, 0, -90 ) );
+            cell.InitMinimapSprite(minimap2Walls, Quaternion.Euler(0, 0, -90));
         }
         else if (!uOk && !rOk)
         {
-            cell.InitMinimapSprite( minimap2Walls, Quaternion.Euler( 0, 0, 0 ) );
+            cell.InitMinimapSprite(minimap2Walls, Quaternion.Euler(0, 0, 0));
         }
     }
 
@@ -322,31 +375,32 @@ public class MapGeneratorIssac : MonoBehaviour
         {
             for (int j = 0; j < tileNumPerCell; j++)
             {
-                curPos = new Vector3Int( cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y + j, 0 );
+                curPos = new Vector3Int(cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y + j, 0);
 
                 if (!isBossCell)
                 {
-                    groundTilemap.SetTile( curPos, groundTile );
+                    groundTilemap.SetTile(curPos, groundTile);
                 }
                 else
                 {
-                    groundTilemap.SetTile( curPos, bossGroundTile );
+                    groundTilemap.SetTile(curPos, bossGroundTile);
                 }
 
                 DungeonManager.GetInstance().AddToTilemapDic(roomID, groundTilemap, curPos);
             }
         }
 
-        // ¹æÀÇ Áß¾Ó°ª ±¸ÇÏ±â
+        //  ß¾Ó° Ï±
         //cell.posWorld = groundTilemap.CellToWorld( new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell / 2, 0 ) );
-        Vector2 pos = new Vector2 ( cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell / 2 );
-        DungeonManager.GetInstance().AddToSameRoomDic( cell );
+        Vector2 pos = new Vector2(cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell / 2);
+        DungeonManager.GetInstance().AddToSameRoomDic(cell);
 
-        // set enemy spawn pos
-        cell.SetSpawnPosList( pos );
+        // set enemy spawn pos - ì›”ë“œ ì¢Œí‘œë¡œ ë³€í™˜í•˜ì—¬ ì „ë‹¬
+        Vector3 worldPos = groundTilemap.CellToWorld(new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell / 2, 0));
+        cell.SetSpawnPosList(worldPos);
     }
 
-    void DrawWall( Cell cell, EDir dir )
+    void DrawWall(Cell cell, EDir dir)
     {
         Vector3Int pos = new Vector3Int(0, 0, 0);
         switch (dir)
@@ -354,46 +408,46 @@ public class MapGeneratorIssac : MonoBehaviour
             case EDir.eDown:
                 for (int i = 0; i < tileNumPerCell; i++)
                 {
-                    pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + i );
-                    SetWallTile( cell, pos );
+                    pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + i);
+                    SetWallTile(cell, pos);
                 }
                 break;
             case EDir.eUp:
                 for (int i = 0; i < tileNumPerCell; i++)
                 {
-                    pos = new Vector3Int( cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + i );
-                    SetWallTile( cell, pos );
+                    pos = new Vector3Int(cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + i);
+                    SetWallTile(cell, pos);
                 }
                 break;
             case EDir.eLeft:
                 for (int i = 0; i < tileNumPerCell; i++)
                 {
-                    pos = new Vector3Int( cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y );
-                    SetWallTile( cell, pos );
+                    pos = new Vector3Int(cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y);
+                    SetWallTile(cell, pos);
                 }
                 break;
             case EDir.eRight:
                 for (int i = 0; i < tileNumPerCell; i++)
                 {
-                    pos = new Vector3Int( cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y + tileNumPerCell - 1 );
-                    SetWallTile( cell, pos );
+                    pos = new Vector3Int(cell.tilemapLocalPos.x + i, cell.tilemapLocalPos.y + tileNumPerCell - 1);
+                    SetWallTile(cell, pos);
                 }
                 break;
             case EDir.eLeftUp:
-                pos = new Vector3Int( cell.tilemapLocalPos.x, cell.tilemapLocalPos.y );
-                SetWallTile( cell, pos );
+                pos = new Vector3Int(cell.tilemapLocalPos.x, cell.tilemapLocalPos.y);
+                SetWallTile(cell, pos);
                 break;
             case EDir.eRightUp:
-                pos = new Vector3Int( cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + tileNumPerCell - 1 );
-                SetWallTile( cell, pos );
+                pos = new Vector3Int(cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + tileNumPerCell - 1);
+                SetWallTile(cell, pos);
                 break;
             case EDir.eLeftDown:
-                pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y );
-                SetWallTile( cell, pos );
+                pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y);
+                SetWallTile(cell, pos);
                 break;
             case EDir.eRightDown:
-                pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + tileNumPerCell - 1 );
-                SetWallTile( cell, pos );
+                pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + tileNumPerCell - 1);
+                SetWallTile(cell, pos);
                 break;
             default:
                 break;
@@ -402,60 +456,56 @@ public class MapGeneratorIssac : MonoBehaviour
 
     void SetWallTile(Cell cell, Vector3Int pos)
     {
-        wallTilemap.SetTile( pos, wallTile );
-        DungeonManager.GetInstance().AddToTilemapDic( roomID, wallTilemap, pos );
+        wallTilemap.SetTile(pos, wallTile);
+        DungeonManager.GetInstance().AddToTilemapDic(roomID, wallTilemap, pos);
     }
 
-    public Door DrawDoor( Cell cell, EDir dir )
+    public Door DrawDoor(Cell cell, EDir dir)
     {
         Vector3Int pos;
-        Door doorInstance = Instantiate( doorObj ).GetComponent<Door>();
+        Door doorInstance = Instantiate(doorObj).GetComponent<Door>();
 
         if (isBossCell) doorInstance.GetComponent<SpriteRenderer>().sprite = bossDoorSprite;
-        
+
         doorInstance.OwnerCell = cell;
         switch (dir)
         {
             case EDir.eLeft:
-                pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y );
-                doorInstance.NextDoorPos = pos + new Vector3Int( 0, -2, 0 );
+                pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y);
                 break;
             case EDir.eRight:
-                pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell - 1 );
-                doorInstance.NextDoorPos = pos + new Vector3Int( 0, 2, 0 );
+                pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell / 2, cell.tilemapLocalPos.y + tileNumPerCell - 1);
                 break;
             case EDir.eUp:
-                pos = new Vector3Int( cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + tileNumPerCell / 2 );
-                doorInstance.NextDoorPos = pos + new Vector3Int( -2, 0, 0 );
+                pos = new Vector3Int(cell.tilemapLocalPos.x, cell.tilemapLocalPos.y + tileNumPerCell / 2);
                 break;
             case EDir.eDown:
-                pos = new Vector3Int( cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + tileNumPerCell / 2 );
-                doorInstance.NextDoorPos = pos + new Vector3Int( 2, 0, 0 );
+                pos = new Vector3Int(cell.tilemapLocalPos.x + tileNumPerCell - 1, cell.tilemapLocalPos.y + tileNumPerCell / 2);
                 break;
             default:
-                pos = new Vector3Int( 0, 0, 0 );
+                pos = new Vector3Int(0, 0, 0);
                 break;
         }
-        
-        wallTilemap.SetTile( pos, null );
-        DungeonManager.GetInstance().AddToDoorDic( cell.id, doorInstance );
-        doorInstance.transform.position = groundTilemap.CellToWorld( pos );
+
+        wallTilemap.SetTile(pos, null);
+        DungeonManager.GetInstance().AddToDoorDic(cell.id, doorInstance);
+        doorInstance.transform.position = groundTilemap.CellToWorld(pos);
         return doorInstance;
     }
 
-    void GenerateDoor( Cell prevCell, Cell postCell, EDir dir )
+    void GenerateDoor(Cell prevCell, Cell postCell, EDir dir)
     {
         Door prevDoor, postDoor;
-        // ¹® ¹æÇâ, À§Ä¡ Á¤Ã¥
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ä¡ ï¿½ï¿½Ã¥
         if (dir == EDir.eRight || dir == EDir.eLeft)
         {
-            prevDoor = DrawDoor( prevCell, EDir.eRight );
-            postDoor = DrawDoor( postCell, EDir.eLeft );
+            prevDoor = DrawDoor(prevCell, EDir.eRight);
+            postDoor = DrawDoor(postCell, EDir.eLeft);
         }
         else
         {
-            prevDoor = DrawDoor( prevCell, EDir.eDown );
-            postDoor = DrawDoor( postCell, EDir.eUp );
+            prevDoor = DrawDoor(prevCell, EDir.eDown);
+            postDoor = DrawDoor(postCell, EDir.eUp);
         }
 
         prevDoor.NextDoor = postDoor;
@@ -464,17 +514,17 @@ public class MapGeneratorIssac : MonoBehaviour
         postDoor.NextDoor.OwnerCell = prevCell;
     }
 
-    (bool, List<Cell>) CheckValidRoom( Cell cell )
+    (bool, List<Cell>) CheckValidRoom(Cell cell)
     {
         bool canGenerate;
         int nx, ny;
         int roomTypeNum = RoomTypes.Length;
         List<Cell> posList = new List<Cell>();
-        // ºí·ÏÀÇ Å©±â¸¦ Á¤ÇÏ±â À§ÇÑ ·£´ı ¹è¿­
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½â¸¦ ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
         int[] currentCellSizeArray = new int[roomTypeNum];
-        // Å©±â°¡ Á¤ÇØÁø ºí·Ï Áß ¾î¶² ¸ğ¾çÀ» ¼±ÅÃÇÒÁö¿¡ ´ëÇÑ ·£´ı ¹è¿­
+        // Å©ï¿½â°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
         int[] currentRoomTypeArray;
-        // ºí·Ï ¸ğ¾çÀÇ °¢ ¼¿ ÁÂÇ¥
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥
         Vector2Int[] roomBlocks;
 
         for (int i = 0; i < roomTypeNum; i++)
@@ -488,11 +538,11 @@ public class MapGeneratorIssac : MonoBehaviour
 
             for (int i = 0; i < currentRoomTypeArray.Length; i++)
                 currentRoomTypeArray[i] = i;
-            
-            currentRoomTypeArray = ShuffleArray<int>( currentRoomTypeArray );
+
+            currentRoomTypeArray = ShuffleArray<int>(currentRoomTypeArray);
             foreach (int currentRoomType in currentRoomTypeArray)
             {
-                // ºí·Ï ¸ğ¾çÀÇ °¢ ¼¿ ÁÂÇ¥
+                // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥
                 roomBlocks = RoomTypes[currentcellSize][currentRoomType];
                 canGenerate = true;
                 posList.Clear();
@@ -500,13 +550,13 @@ public class MapGeneratorIssac : MonoBehaviour
                 {
                     nx = cell.pos.x + blockPos.x;
                     ny = cell.pos.y + blockPos.y;
-                    // ¸ÊÀ» ¹ş¾î³ª°Å³ª ÀÌ¹Ì »ı¼ºµÈ ¼¿ÀÌ¸é ´Ù¸¥ ÀÚ¸®¸¦ Ã£¾ÆºÁ¾ß ÇÑ´Ù.
-                    if (nx < 0 || nx >= cellList.GetLength( 1 ) || ny < 0 || ny >= cellList.GetLength( 0 ) || cellList[nx, ny].isChecked)
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³ªï¿½Å³ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ù¸ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ Ã£ï¿½Æºï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
+                    if (nx < 0 || nx >= cellList.GetLength(1) || ny < 0 || ny >= cellList.GetLength(0) || cellList[nx, ny].isChecked)
                     {
                         canGenerate = false;
                         break;
                     }
-                    posList.Add( cellList[nx, ny] );
+                    posList.Add(cellList[nx, ny]);
                 }
                 if (canGenerate)
                 {
@@ -528,7 +578,7 @@ public class MapGeneratorIssac : MonoBehaviour
         for (int i = 0; i < currentRoomTypeArray.Length; i++)
             currentRoomTypeArray[i] = i;
 
-        currentRoomTypeArray = ShuffleArray<int>( currentRoomTypeArray );
+        currentRoomTypeArray = ShuffleArray<int>(currentRoomTypeArray);
         foreach (int currentRoomType in currentRoomTypeArray)
         {
             poses = RoomTypes[3][currentRoomType];
@@ -538,28 +588,28 @@ public class MapGeneratorIssac : MonoBehaviour
             {
                 nx = cell.pos.x + pos.x;
                 ny = cell.pos.y + pos.y;
-                if (nx < 0 || nx >= cellList.GetLength( 1 ) || ny < 0 || ny >= cellList.GetLength( 0 ) || cellList[nx, ny].isChecked)
+                if (nx < 0 || nx >= cellList.GetLength(1) || ny < 0 || ny >= cellList.GetLength(0) || cellList[nx, ny].isChecked)
                 {
                     canGenerate = false;
                     break;
                 }
-                posList.Add( cellList[nx, ny] );
+                posList.Add(cellList[nx, ny]);
             }
             if (canGenerate)
             {
                 return (true, posList);
             }
         }
-        Debug.Log( "00000" );
+        Debug.Log("00000");
         return (false, posList);
     }
 
-    // (±âÁØ, ÀÎÁ¢)
-    HashSet<Cell> GetNearCells( List<Cell> suburbCellList )
+    // (ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½)
+    HashSet<Cell> GetNearCells(List<Cell> suburbCellList)
     {
         int nx, ny;
         HashSet<Cell> nearCells = new HashSet<Cell>();
-        suburbCellList = ShuffleList<Cell>( suburbCellList );
+        suburbCellList = ShuffleList<Cell>(suburbCellList);
         foreach (Cell curPos in suburbCellList)
         {
             for (int i = 0; i < 4; i++)
@@ -567,21 +617,21 @@ public class MapGeneratorIssac : MonoBehaviour
                 nx = curPos.pos.x + xdir[i];
                 ny = curPos.pos.y + ydir[i];
                 if (nx < 0 || nx >= mapSize.x || ny < 0 || ny >= mapSize.y || cellList[nx, ny].isChecked) continue;
-                nearCells.Add( cellList[nx, ny] );
+                nearCells.Add(cellList[nx, ny]);
             }
         }
         return nearCells;
     }
 
-    private T[] ShuffleArray<T>( T[] array )
+    private T[] ShuffleArray<T>(T[] array)
     {
         int random1, random2;
         T temp;
 
         for (int i = 0; i < array.Length; ++i)
         {
-            random1 = UnityEngine.Random.Range( 0, array.Length );
-            random2 = UnityEngine.Random.Range( 0, array.Length );
+            random1 = UnityEngine.Random.Range(0, array.Length);
+            random2 = UnityEngine.Random.Range(0, array.Length);
 
             temp = array[random1];
             array[random1] = array[random2];
@@ -591,15 +641,15 @@ public class MapGeneratorIssac : MonoBehaviour
         return array;
     }
 
-    private List<T> ShuffleList<T>( List<T> list )
+    private List<T> ShuffleList<T>(List<T> list)
     {
         int random1, random2;
         T temp;
 
         for (int i = 0; i < list.Count; ++i)
         {
-            random1 = UnityEngine.Random.Range( 0, list.Count );
-            random2 = UnityEngine.Random.Range( 0, list.Count );
+            random1 = UnityEngine.Random.Range(0, list.Count);
+            random2 = UnityEngine.Random.Range(0, list.Count);
 
             temp = list[random1];
             list[random1] = list[random2];

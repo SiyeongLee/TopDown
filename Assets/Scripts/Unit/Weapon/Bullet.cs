@@ -1,75 +1,101 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.UIElements;
 
 public class Bullet : MonoBehaviour
 {
-    bool isFire = false;
-    float time = 3.0f;
-    float curTime = 0f;
-    [SerializeField] private float speed = 10;
-    [SerializeField] private float damage = 40;
-    CircleCollider2D circleCollider;
-
+    public float damage = 40f;
+    public float lifeTime = 10f;
+    private float speed;
+    private Vector3 direction;
     public IObjectPool<GameObject> pool { get; set; }
+    private bool isReleased = false;
 
-    void Start()
+    public void Fire(float bulletSpeed, Quaternion rotation, float damage)
     {
-        circleCollider = GetComponent<CircleCollider2D>();
+        speed = bulletSpeed;
+        direction = rotation * Vector3.right;
+        this.damage = damage;
+        Invoke("DestroySelf", lifeTime);
     }
 
     void Update()
     {
-        if (isFire)
+        transform.position += direction * speed * Time.deltaTime;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isReleased) return;
+        Debug.Log($"[Bullet] OnTriggerEnter2D 충돌: {collision.gameObject.name}, 태그: {collision.tag}, 레이어: {collision.gameObject.layer}");
+        
+        // Enemy 컴포넌트로 충돌 감지
+        Enemy enemy = collision.GetComponent<Enemy>();
+        if (enemy != null)
         {
-            float x = Mathf.Sin( (transform.rotation.z + 90) * Mathf.Deg2Rad );
-            float y = Mathf.Cos( (transform.rotation.z + 90) * Mathf.Deg2Rad );
-            //float z = Mathf.Tan( transform.rotation.z * Mathf.Deg2Rad );
-            Vector3 dir = new Vector3(x, y).normalized;
-            this.transform.Translate( dir * Time.deltaTime * speed );
+            Debug.Log($"[Bullet] Enemy 컴포넌트 찾음! 데미지 전달: {damage}");
+            enemy.TakeDamage(damage);
+            
+            // 즉시 파괴
+            DestroySelf();
+            return;
         }
-    }
-
-    public void Fire()
-    {
-        isFire = true;
-        StartCoroutine( StartTimer() );
-    }
-
-    IEnumerator StartTimer()
-    {
-        curTime = time;
-        while (curTime > 0)
+        
+        // Player 컴포넌트 확인 (플레이어에게는 데미지 주지 않음)
+        if (collision.GetComponent<Player>() != null)
         {
-            curTime -= Time.deltaTime;
-            yield return null;
-
-            if (curTime <= 0)
-            {
-                curTime = 0;
-                isFire = false;
-                pool.Release( gameObject );
-                yield break;
-            }
+            Debug.Log("[Bullet] Player와 충돌 - 무시");
         }
+        // 기타 오브젝트
+        else
+        {
+            Debug.Log($"[Bullet] 기타 오브젝트와 충돌: {collision.gameObject.name}");
+        }
+        
+        DestroySelf();
     }
 
-    private void OnTriggerEnter2D( Collider2D collision )
+    void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isReleased) return;
+        Debug.Log($"[Bullet] OnCollisionEnter2D 충돌: {collision.gameObject.name}, 태그: {collision.gameObject.tag}, 레이어: {collision.gameObject.layer}");
+        
+        // Enemy 컴포넌트로 충돌 감지
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        Boss boss = collision.gameObject.GetComponent<Boss>();
-        if (boss != null)
+        if (enemy != null)
         {
-            boss.TakeDamage( damage );
-        } 
-        else if (enemy != null)
-        {
-            enemy.TakeDamage( damage );
+            Debug.Log($"[Bullet] Enemy 컴포넌트 찾음! 데미지 전달: {damage}");
+            enemy.TakeDamage(damage);
+            
+            // 즉시 파괴
+            DestroySelf();
+            return;
         }
+        
+        DestroySelf();
+    }
 
-        if (gameObject.activeSelf)
-            pool.Release( gameObject );
+    void DestroySelf()
+    {
+        if (isReleased) return;
+        isReleased = true;
+
+        if (pool != null)
+        {
+            pool.Release(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnEnable()
+    {
+        isReleased = false;
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke();
     }
 }
